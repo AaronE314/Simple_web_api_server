@@ -90,7 +90,7 @@ app.get("/query/all/:inventory?", (req, res) => {
  * 
  * @param product the product title (name) that has been perchased.
  */
-app.post("/purchase/:product", (req, res) => {
+app.get("/purchase/:product", (req, res) => {
     try {
 
         // Finds the product by name.
