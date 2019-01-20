@@ -116,6 +116,11 @@ app.use("/purchase/:product", (req, res) => {
     }
 });
 
+/**
+ * Creates A cart
+ * 
+ * @returns The id of the cart that was created
+ */
 app.use("/cart/create", (req, res) => {
     try {
 
@@ -140,6 +145,14 @@ app.use("/cart/create", (req, res) => {
     }
 });
 
+/**
+ * Adds the given product to the cart with the given ID
+ * 
+ * @param product the title (name) of the product that is being added.
+ * @param id the ID of the cart to add the item too.
+ * 
+ * @returns the JSON object of the current cart.
+ */
 app.use("/cart/add/:product/:id", (req, res) => {
     try {
 
@@ -183,6 +196,13 @@ app.use("/cart/add/:product/:id", (req, res) => {
     }
 });
 
+/**
+ * Closes the cart and removes the items from the inventory
+ * 
+ * @param product the id of the cart to close.
+ * 
+ * @returns the JSON object of the final cart.
+ */
 app.use("/cart/close/:id", (req, res) => {
     try {
 
