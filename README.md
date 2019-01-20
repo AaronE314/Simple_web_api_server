@@ -1,4 +1,4 @@
-# Simple Web api marketplace
+# Simple Web API Marketplace
 
 ## Intro
 
@@ -25,3 +25,4 @@ Then to make a request add the endpoint url after the local host as follows `loc
 | Create a Cart | /cart/create | Creates a cart and returns the unique ID of the cart |
 | Add to a Cart | /cart/add/:product/:id | Adds the given product to the cart and returns your current cart |
 | Close a cart | /cart/close/:id | Closes the cart and returns the final cart |
+
