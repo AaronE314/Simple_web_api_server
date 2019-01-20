@@ -22,6 +22,6 @@ Then to make a request add the endpoint url after the local host as follows `loc
 | Query all products | /query/all/ | returns the title, price and inventory count of every product |
 | Query all products in stock | /query/all/1 or /query/all/true | returns title, price and inventory count of every product in stock |
 | Perchase a product | /purchase/:product | Perchases the given product by reducing the inventory count |
-
-
-[test](https://www.getpostman.com/)
+| Create a Cart | /cart/create | Creates a cart and returns the unique ID of the cart |
+| Add to a Cart | /cart/add/:product/:id | Adds the given product to the cart and returns your current cart |
+| Close a cart | /cart/close/:id | Closes the cart and returns the final cart |

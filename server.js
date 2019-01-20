@@ -2,6 +2,7 @@
 // Imports
 const express = require('express');
 const fs = require('fs');
+const util = require('util');
 const app = express();
 
 // Port for server
@@ -15,6 +16,9 @@ const ERROR_CODES = Object.freeze({
 
 // Inventory JSON -> Loaded on startup
 let inventory = null;
+
+let carts = [];
+let cartId = 0;
 
 // Loads the inventory from storage (JSON)
 function loadInentory() {
@@ -39,7 +43,7 @@ function saveInventory() {
  * 
  * @returns the JSON object of the product which contains the title, price, and inventory Count.
  */
-app.get("/query/single/:product", (req, res) => {
+app.use("/query/single/:product", (req, res) => {
     try {
 
         // Finds the product in the inventroy.s
@@ -61,7 +65,7 @@ app.get("/query/single/:product", (req, res) => {
  * 
  * @returns the JSON objects of all products or only the ones in stock. 
  */
-app.get("/query/all/:inventory?", (req, res) => {
+app.use("/query/all/:inventory?", (req, res) => {
     try {
         let products;
 
@@ -90,7 +94,7 @@ app.get("/query/all/:inventory?", (req, res) => {
  * 
  * @param product the product title (name) that has been perchased.
  */
-app.get("/purchase/:product", (req, res) => {
+app.use("/purchase/:product", (req, res) => {
     try {
 
         // Finds the product by name.
@@ -106,6 +110,115 @@ app.get("/purchase/:product", (req, res) => {
         }
 
         res.send("OK");
+
+    } catch (error) {
+        res.status(ERROR_CODES.internalError).send({ message: error.message });
+    }
+});
+
+app.use("/cart/create", (req, res) => {
+    try {
+
+        // Creates a cart object
+        let cart = {
+            cartId: cartId,
+            totalCost: 0.00,
+            items: []
+        }
+
+        // Increments global cart counter
+        cartId++;
+
+        // Adds new cart to master cart list.
+        carts.push(cart);
+
+        // Sends the cart Id back to the user.
+        res.send({cartId: cart.cartId});
+
+    } catch (error) {
+        res.status(ERROR_CODES.internalError).send({ message: error.message });
+    }
+});
+
+app.use("/cart/add/:product/:id", (req, res) => {
+    try {
+
+        // Finds the product by name.
+        let product = inventory.products.filter(prod => { return prod.title === req.params.product });
+        if (product.length) {
+            product = product[0];
+        } else {
+            throw new Error("Unknown Product");
+        }
+        let id = parseInt(req.params.id);
+
+        // check for valud carts
+        let cart = carts.filter(cart => { return cart.cartId === id });
+
+        // checks to see if there is inventory left
+        if (product.inventory_count <= 0) {
+            throw new Error("No product left");
+        } else if (id === NaN) {
+            throw new Error("Id is not a number");
+        } else if (cart.length === 0) {
+            throw new Error("Cart doesn't exist");
+        } else {
+
+            cart = cart[0];
+
+            // adds the item to the cart with given id
+            cart.items.push(product);
+
+            // updates the total cost for the cart
+            cart.totalCost += product.price;
+        }
+
+        // prints the carts for server tracking.
+        console.log(util.inspect(carts, false, null, true));
+
+        res.send(cart);
+
+    } catch (error) {
+        res.status(ERROR_CODES.internalError).send({ message: error.message });
+    }
+});
+
+app.use("/cart/close/:id", (req, res) => {
+    try {
+
+        let id = parseInt(req.params.id);
+
+        let cart = carts.filter(cart => { return cart.cartId === id });
+
+        if (id === NaN) {
+            throw new Error("Id is not a number");
+        } else if (cart.length === 0) {
+            throw new Error("Cart doesn't exist");
+        } else {
+
+            cart = cart[0];
+            
+            for (let i = 0; i < cart.items.length; i++) {
+                // Finds item in inventory
+                let product = inventory.products.filter(prod => { return prod.title === cart.items[i].title });
+                // Updates count
+                product[0].inventory_count--;
+            }
+            
+            // removes from carts
+            let i = carts.indexOf(cart);
+            carts.splice(i, 1);
+
+            // Updates inventory file
+            saveInventory();
+
+            // prints the carts for server tracking.
+            console.log(util.inspect(carts, false, null, true));
+            
+        }
+
+        // returns the cart
+        res.json(cart);
 
     } catch (error) {
         res.status(ERROR_CODES.internalError).send({ message: error.message });

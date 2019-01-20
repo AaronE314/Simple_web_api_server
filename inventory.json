@@ -3,17 +3,17 @@
         {
             "title": "apple",
             "price": 1,
-            "inventory_count": 198
+            "inventory_count": 181
         },
         {
             "title": "bannana",
             "price": 2.5,
-            "inventory_count": 100
+            "inventory_count": 99
         },
         {
             "title": "orange",
             "price": 0.5,
-            "inventory_count": 100
+            "inventory_count": 98
         },
         {
             "title": "grape fruit",
@@ -28,7 +28,7 @@
         {
             "title": "blueberries",
             "price": 2.5,
-            "inventory_count": 20
+            "inventory_count": 15
         },
         {
             "title": "raspberries",
