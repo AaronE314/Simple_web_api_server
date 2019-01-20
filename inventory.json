@@ -1,0 +1,39 @@
+{
+    "products": [
+        {
+            "title": "apple",
+            "price": 1,
+            "inventory_count": 199
+        },
+        {
+            "title": "bannana",
+            "price": 2.5,
+            "inventory_count": 100
+        },
+        {
+            "title": "orange",
+            "price": 0.5,
+            "inventory_count": 100
+        },
+        {
+            "title": "grape fruit",
+            "price": 3,
+            "inventory_count": 2
+        },
+        {
+            "title": "coconut",
+            "price": 7.25,
+            "inventory_count": 0
+        },
+        {
+            "title": "blueberries",
+            "price": 2.5,
+            "inventory_count": 20
+        },
+        {
+            "title": "raspberries",
+            "price": 2.5,
+            "inventory_count": 1
+        }
+    ]
+}
