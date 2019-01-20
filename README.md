@@ -1,4 +1,4 @@
-# Simple Web api marketplace
+# Simple Web API Marketplace
 
 ## Intro
 
